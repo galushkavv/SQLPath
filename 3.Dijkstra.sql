@@ -1,11 +1,11 @@
 use Graphs;
 
--- Алгоритм Дейкстры --
+-- ГЂГ«ГЈГ®Г°ГЁГІГ¬ Г„ГҐГ©ГЄГ±ГІГ°Г» --
 
 declare @from int
-set @from = 1 -- откуда
+set @from = 1 -- Г®ГІГЄГіГ¤Г 
 declare @to int
-set @to = 7 -- куда
+set @to = 7 -- ГЄГіГ¤Г 
 
 create table #vertexes
 (
@@ -24,7 +24,7 @@ create table #tmp
 )
 
 insert into #vertexes (number, status, distance)
-	select distinct v1, case(v1) when @from then 2 else 0 end, case(v1) when @from then 0 else 9999999999/*бесконечность*/ end
+	select distinct v1, case(v1) when @from then 2 else 0 end, case(v1) when @from then 0 else 9999999999/*ГЎГҐГ±ГЄГ®Г­ГҐГ·Г­Г®Г±ГІГј*/ end
 	from Edges
 
 while((select count(*) from #vertexes where status = 0) > 0)
@@ -35,7 +35,7 @@ begin
 	select v2, 0, distance+weight, v1
 	from #vertexes inner join Edges on Edges.v1=#vertexes.number
 	where status = 2
-	-- переделать удаление на группировку с выбором минимального в группе --
+	
 	delete from #tmp where number not in (select #tmp.number from #tmp inner join #vertexes on #tmp.number=#vertexes.number and #vertexes.distance > #tmp.distance)
 	delete from #vertexes where number in (select number from #tmp)
 
